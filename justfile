@@ -18,6 +18,9 @@ release:
 test:
 	zig test nanoid.zig
 
+run:
+	zig run main.zig
+
 clean:
 	-rm {{APP}}
 	-rm -rf zig-cache
