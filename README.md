@@ -76,7 +76,7 @@ $ just test
 
 ## References
 
-I did not find any concrete specs similar to the UUID specs, and referred to some the existing implementations.
+I did not find any concrete specs similar to the UUID specs, and referred to some of the existing implementations.
 
 ### Implementations
 
