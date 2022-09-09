@@ -13,7 +13,7 @@ build:
 
 release:
 	zig build-exe -O ReleaseSmall --name {{APP}} --strip -fsingle-threaded  main.zig
-	-upx {{APP}}
+	#-upx {{APP}}
 
 test:
 	zig test nanoid.zig
