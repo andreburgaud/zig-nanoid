@@ -2,9 +2,9 @@
 
 Nanoid implementation in Zig
 
-When I need a random ID, I commonly generate a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier). The [UUID specification](https://datatracker.ietf.org/doc/html/rfc4122) is precise and the specified algorithms supporting UUID are sound.
+When I need a random ID, I commonly generate a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) because the [UUID specification](https://datatracker.ietf.org/doc/html/rfc4122) is precise, and the specified algorithms supporting UUID are sound.
 
-I realized that **Nanoid** was very popular among JavaScript afficionados. As a curiosity and to understand the underlying algorithms, I decided to implement Nanoid in Zig that I'm currently learning.
+I realized that **Nanoid** was very popular among JavaScript aficionados. So, as a curiosity to understand the underlying algorithms, I decided to implement Nanoid in Zig, which I'm currently learning.
 
 ## Code
 
@@ -51,7 +51,7 @@ $ nanoid --size 42 --alphabet 0123456789
 
 ## Build
 
-The build uses a `justfile` https://github.com/casey/just and as only be tested on Mac OS as of 1/24/2022.
+The build uses a `justfile` https://github.com/casey/just tested on Mac OS and Linux.
 
 To build in debug mode:
 
@@ -76,7 +76,7 @@ $ just test
 
 ## References
 
-I did not find any concrete specs similar to the UUID specs, and referred to some of the existing implementations.
+I did not find any concrete specs similar to the UUID specs and referred to some of the existing implementations.
 
 ### Implementations
 
