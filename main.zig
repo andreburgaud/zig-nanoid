@@ -2,7 +2,7 @@ const std = @import("std");
 const print = std.debug.print;
 const nanoid = @import("nanoid.zig");
 const app_name = "nanoid";
-const app_version = "0.1.0";
+const app_version = "0.2.0";
 
 fn version() void {
     print("{s} version {s}\n", .{ app_name, app_version });
@@ -31,6 +31,9 @@ pub fn main() !void {
     const args = try std.process.argsAlloc(std.heap.page_allocator);
     defer std.process.argsFree(std.heap.page_allocator, args);
     //var option_index: usize = 1;
+
+    // To print to stdout
+    var out = std.io.getStdOut().writer();
 
     var size: u32 = 0;
     var alphabet: []u8 = "";
@@ -92,7 +95,7 @@ pub fn main() !void {
                 std.debug.print("error creating a nanoid with len {d} and alphabet {s}: {s}\n", .{size, alphabet, err});
                 std.process.exit(1);
             };
-            std.debug.print("{s}\n", .{id_with_size_alphabet});
+            try out.print("{s}\n", .{id_with_size_alphabet});
             return;
         }
 
@@ -102,7 +105,7 @@ pub fn main() !void {
                 std.debug.print("error creating a nanoid with len {d} {s}\n", .{size, err});
                 std.process.exit(1);
             };
-            std.debug.print("{s}\n", .{id_with_size});
+            try out.print("{s}\n", .{id_with_size});
             return;
         }
 
@@ -123,6 +126,6 @@ pub fn main() !void {
         std.debug.print("error creating a nanoid {s}\n", .{err});
         std.process.exit(1);
     };
-    std.debug.print("{s}\n", .{id});
+    try out.print("{s}\n", .{id});
 }
 
