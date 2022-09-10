@@ -2,7 +2,7 @@ const std = @import("std");
 const print = std.debug.print;
 const nanoid = @import("nanoid.zig");
 const app_name = "nanoid";
-const app_version = "0.2.0";
+const app_version = "0.3.0";
 
 fn version() void {
     print("{s} version {s}\n", .{ app_name, app_version });
@@ -30,7 +30,6 @@ pub fn main() !void {
     // CLI
     const args = try std.process.argsAlloc(std.heap.page_allocator);
     defer std.process.argsFree(std.heap.page_allocator, args);
-    //var option_index: usize = 1;
 
     // To print to stdout
     var out = std.io.getStdOut().writer();
@@ -87,7 +86,7 @@ pub fn main() !void {
 
         var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
         defer arena.deinit();
-        const allocator = &arena.allocator();
+        const allocator = arena.allocator();
 
         // Generate an id with a custom size and alphabet
         if (size > 0 and alphabet.len > 0) {
@@ -128,4 +127,3 @@ pub fn main() !void {
     };
     try out.print("{s}\n", .{id});
 }
-

@@ -37,7 +37,7 @@ pub fn default() ![default_id_size]u8 {
 }
 
 /// customLen implements a nanoid generation that takes an id size.
-pub fn customLen(allocator: *std.mem.Allocator, id_size: u32) ![]u8 {
+pub fn customLen(allocator: std.mem.Allocator, id_size: u32) ![]u8 {
     if (!prng_exists) {
         try random();
     }
@@ -81,7 +81,7 @@ fn countRandBytes(id_size: u32, alphabet_size: u32, mask: u32) u32 {
 }
 
 /// customAlphabet generates a nanoid given a custom alphabet and a size for the resulting id
-pub fn customAlphabet(allocator: *std.mem.Allocator, size: u32, alphabet: []u8) ![]u8 {
+pub fn customAlphabet(allocator: std.mem.Allocator, size: u32, alphabet: []u8) ![]u8 {
     // Instantiate PRNG
     if (!prng_exists) {
         try random();
@@ -130,7 +130,7 @@ test "nanoid default length and alphabet" {
 test "nanoid with length 30" {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
-    const allocator = &arena.allocator();
+    const allocator = arena.allocator();
     var id = try customLen(allocator, 30);
     std.debug.print("{s}\n", .{ id });
     try std.testing.expect(id.len == 30);
@@ -139,7 +139,7 @@ test "nanoid with length 30" {
 test "nanoid with length 255" {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
-    const allocator = &arena.allocator();
+    const allocator = arena.allocator();
     var id = try customLen(allocator, 256);
     std.debug.print("{s}\n", .{ id });
     try std.testing.expect(id.len == 256);
@@ -148,7 +148,7 @@ test "nanoid with length 255" {
 test "nanoid with custom alphabet" {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
-    const allocator = &arena.allocator();
+    const allocator = arena.allocator();
     var numbers = "0123456789";
     const n = try allocator.alloc(u8, numbers.len);
     std.mem.copy(u8, n, numbers);
