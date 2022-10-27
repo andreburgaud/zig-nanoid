@@ -23,7 +23,7 @@ pub fn default() ![default_id_size]u8 {
         try random();
     }
 
-    // Feel a buffer with random bytes
+    // Fill a buffer with random bytes
     var buf: [default_id_size]u8 = undefined;
     prng.random().bytes(&buf);
 
@@ -59,8 +59,11 @@ pub fn customLen(allocator: std.mem.Allocator, id_size: u32) ![]u8 {
 /// From https://github.com/ai/nanoid/blob/main/index.js:
 /// First, a bitmask is necessary to generate the ID. The bitmask makes bytes
 /// values closer to the alphabet size. The bitmask calculates the closest
-/// `2^31 - 1` number, which exceeds the alphabet size.
+/// number, which exceeds the alphabet size.
 /// For example, the bitmask for the alphabet size 30 is 31 (00011111).
+/// (2 << (31 - Math.clz32((30 - 1)))) - 1
+/// or
+/// Math.pow(2, 32 - Math.clz32(30 - 1)) -1
 fn calcMask(alphabet_size: u32) !u32 {
     var size: u32 = if (alphabet_size - 1 == 0) 1 else alphabet_size - 1;
 
