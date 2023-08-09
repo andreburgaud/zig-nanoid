@@ -1,4 +1,6 @@
 zig-cache
 nanoid
 nanoid.o
+nanoid.exe
+nanoid.exe.obj
 dist/

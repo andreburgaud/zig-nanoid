@@ -7,6 +7,7 @@ alias c := clean
 alias r := release
 alias ru := release-upx
 alias t := test
+alias ghp := github-push
 
 # Help
 default:
@@ -26,7 +27,7 @@ release:
 	zig build-exe -O ReleaseSmall --name {{APP}} -fstrip -fsingle-threaded main.zig
 
 # Distributions
-dist: init-dist dist-linux dist-mac-amd64 dist-mac-arm
+dist: init-dist dist-linux dist-mac-amd64 dist-mac-arm dist-win-amd64
 
 # Create
 init-dist: clean
@@ -35,22 +36,26 @@ init-dist: clean
 # Distribution for linux
 dist-linux:
 	zig build-exe -O ReleaseSmall --name {{APP}} -fstrip -fsingle-threaded -target x86_64-linux-musl main.zig
-	zip -j {{DIST}}/{{APP}}-{{VERSION}}_linux_x86_64.zip {{APP}}
+	zip -j {{DIST}}/{{APP}}-{{VERSION}}_linux_x86_64.zip {{APP}} LICENSE README.md
+	rm {{APP}} {{APP}}.o
 
 # Distribution for Mac amd64
 dist-mac-amd64:
 	zig build-exe -O ReleaseSmall --name {{APP}} -fstrip -fsingle-threaded -target x86_64-macos-none main.zig
-	zip -j {{DIST}}/{{APP}}-{{VERSION}}_mac_amd64.zip {{APP}}
+	zip -j {{DIST}}/{{APP}}-{{VERSION}}_mac_amd64.zip {{APP}} LICENSE README.md
+	rm {{APP}} {{APP}}.o
 
 # Distribution for Mac arm64
 dist-mac-arm:
 	zig build-exe -O ReleaseSmall --name {{APP}} -fstrip -fsingle-threaded -target aarch64-macos-none main.zig
-	zip -j {{DIST}}/{{APP}}-{{VERSION}}_mac_arm64.zip {{APP}}
+	zip -j {{DIST}}/{{APP}}-{{VERSION}}_mac_arm64.zip {{APP}} LICENSE README.md
+	rm {{APP}} {{APP}}.o
 
 # Distribution for Windows amd64
 dist-win-amd64:
 	zig build-exe -O ReleaseSmall --name {{APP}} -fstrip -fsingle-threaded -target x86_64-windows-gnu main.zig
-	zip -j {{DIST}}/{{APP}}-{{VERSION}}_win_amd64.zip {{APP}}
+	zip -j {{DIST}}/{{APP}}-{{VERSION}}_win_amd64.zip {{APP}}.exe LICENSE README.md
+	rm {{APP}}.exe nanoid.exe.obj
 
 # Test
 test:
@@ -62,7 +67,7 @@ run:
 
 # Remove binaries and cache
 clean:
-	-rmm -rf {{DIST}}
+	-rm -rf {{DIST}}
 	-rm {{APP}}
 	-rm -rf zig-cache
 
