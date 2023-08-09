@@ -68,7 +68,7 @@ fn calcMask(alphabet_size: u32) !u32 {
     var size: u32 = if (alphabet_size - 1 == 0) 1 else alphabet_size - 1;
 
     // Count leading zeroes (clz)
-    const clz = @clz(u32, size);
+    const clz = @clz(size);
 
     const p = try std.math.powi(u32, 2, (@typeInfo(u32).Int.bits - clz));
     return p - 1;
@@ -80,7 +80,7 @@ fn calcMask(alphabet_size: u32) !u32 {
 /// alphabet size, and magic number 1.6 (using 1.6 peaks at performance
 /// according to benchmarks) (source?)
 fn countRandBytes(id_size: u32, alphabet_size: u32, mask: u32) u32 {
-   return @floatToInt(u32, @ceil(1.6 * (@intToFloat(f32, mask * id_size) / @intToFloat(f32, alphabet_size))));
+    return @as(u32, @intFromFloat(@ceil(1.6 * (@as(f32, @floatFromInt(mask * id_size)) / @as(f32, @floatFromInt(alphabet_size))))));
 }
 
 /// customAlphabet generates a nanoid given a custom alphabet and a size for the resulting id
@@ -91,8 +91,8 @@ pub fn customAlphabet(allocator: std.mem.Allocator, size: u32, alphabet: []u8) !
     }
 
     // Calculate mask
-    const alphabet_size: u32 = @intCast(u32, alphabet.len);
-    const id_size = @intCast(u32, size);
+    const alphabet_size: u32 = @as(u32, @intCast(alphabet.len));
+    const id_size = @as(u32, @intCast(size));
     const mask = try calcMask(alphabet_size);
 
     // Random bytes buffer
@@ -126,7 +126,7 @@ test "nanoid default length and alphabet" {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     var id = try default();
-    std.debug.print("{s}\n", .{ id });
+    std.debug.print("{s}\n", .{id});
     try std.testing.expect(id.len == 21);
 }
 
@@ -135,7 +135,7 @@ test "nanoid with length 30" {
     defer arena.deinit();
     const allocator = arena.allocator();
     var id = try customLen(allocator, 30);
-    std.debug.print("{s}\n", .{ id });
+    std.debug.print("{s}\n", .{id});
     try std.testing.expect(id.len == 30);
 }
 
@@ -144,7 +144,7 @@ test "nanoid with length 255" {
     defer arena.deinit();
     const allocator = arena.allocator();
     var id = try customLen(allocator, 256);
-    std.debug.print("{s}\n", .{ id });
+    std.debug.print("{s}\n", .{id});
     try std.testing.expect(id.len == 256);
 }
 
@@ -156,24 +156,24 @@ test "nanoid with custom alphabet" {
     const n = try allocator.alloc(u8, numbers.len);
     std.mem.copy(u8, n, numbers);
     var id = try customAlphabet(allocator, 25, n);
-    std.debug.print("{s}\n", .{ id });
+    std.debug.print("{s}\n", .{id});
     try std.testing.expect(id.len == 25);
 }
 
 test "mask for alphabet size 8" {
     const mask = try calcMask(8);
-    std.debug.print("{d}\n", .{ mask });
+    std.debug.print("{d}\n", .{mask});
     try std.testing.expect(mask == 7);
 }
 
 test "mask for alphabet size 30" {
     const mask = try calcMask(30);
-    std.debug.print("{d}\n", .{ mask });
+    std.debug.print("{d}\n", .{mask});
     try std.testing.expect(mask == 31);
 }
 
 test "mask for alphabet size 254" {
     const mask = try calcMask(254);
-    std.debug.print("{d}\n", .{ mask });
+    std.debug.print("{d}\n", .{mask});
     try std.testing.expect(mask == 255);
 }

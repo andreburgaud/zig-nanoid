@@ -1,2 +1,4 @@
 zig-cache
 nanoid
+nanoid.o
+dist/
